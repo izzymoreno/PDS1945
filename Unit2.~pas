@@ -1,0 +1,62 @@
+unit Unit2;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls;
+
+type
+  TForm2 = class(TForm)
+    Image1: TImage;
+    Image2: TImage;
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+  Xold,Yold: integer;
+  Masskn, MassR1, MassR2, MassR3, MassR4, MassPnfe: TMass;
+implementation
+
+{$R *.DFM}
+
+uses unit1;
+
+procedure TForm2.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+//Form2.Image1.Canvas.Draw(0,0,VirtCanvas);
+Form2.Image1.Canvas.CopyRect(Rect(Xold,0,Xold+1,Form2.Image1.Height),
+                             VirtCanvas.Canvas,
+                             Rect(Xold,0,Xold+1,VirtCanvas.Height));
+Form2.Image1.Canvas.CopyRect(Rect(0,Yold,Form2.Image1.Width,Yold+1),
+                             VirtCanvas.Canvas,
+                             Rect(0,Yold,VirtCanvas.Width,Yold+1));
+{VirtCanvas.Canvas.CopyRect(Rect(X,0,X+1,Form2.Image1.Height),
+                             Form2.Image1.Canvas,
+                             Rect(X,0,X+1,VirtCanvas.Height));}
+Form1.Line(Form2.Image1.Canvas,X,0,X,Form2.Image1.Height,clgray);
+Form1.Line(Form2.Image1.Canvas,0,Y,Form2.Image1.Width,Y,clgray);
+Form2.Caption:='Координаты: X:='+FloatToStr(Form1.ImgXToRealX(X))+
+               ' '+'Y:='+FloatToStr(Form1.ImgYToRealY(Y));
+Xold:=X;
+Yold:=Y;
+end;
+
+procedure TForm2.FormShow(Sender: TObject);
+begin
+If VirtCanvas <> nil then
+   begin
+   VirtCanvas.Height:=Image1.Height;
+   VirtCanvas.Width:=Image1.Width;
+   end;
+end;
+
+end.
